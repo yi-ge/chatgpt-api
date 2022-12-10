@@ -2,7 +2,7 @@
 
 <https://github.com/yi-ge/chatgpt-web> 的后端程序。
 
-借助OpenAPI官方API实现，旨在降低中国大陆用户体验ChatGPT的成本。
+借助OpenAPI官方Web的API实现，旨在降低中国大陆用户体验ChatGPT的成本。
 
 API代码正在完善。
 

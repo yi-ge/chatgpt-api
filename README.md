@@ -6,6 +6,10 @@
 
 API代码正在完善。
 
+## 依赖
+
+基于 <https://github.com/rawandahmad698/PyChatGPT> 二次开发，Fork to: <https://github.com/yi-ge/PyChatGPT>
+
 ## Disclaimers 免责声明
 
 This is not an official OpenAI product. This is a personal project and is not affiliated with OpenAI in any way. Don't sue me.

@@ -115,10 +115,10 @@ def disconnect(sid):
 
 @sio.event
 async def chatgpt(sid, data):
-    text = data.text
-    token = data.token
+    text = data.get('text')
+    token = data.get('token')
     # userUUID = sidUUIDMap[sid]
-    if token == '' or token not in tokenSet:
+    if token is None or token not in tokenSet:
         await sio.emit('restricted', room=sid)
     task = Timer(3, getAnswer, (
         sid,

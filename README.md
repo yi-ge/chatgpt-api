@@ -12,6 +12,14 @@ API代码正在完善。
 
 基于 <https://github.com/rawandahmad698/PyChatGPT> 二次开发，Fork to: <https://github.com/yi-ge/PyChatGPT>
 
+## 运行
+
+```bash
+python3 main.py
+```
+
+**请勿用于商业用途，请保留开源仓库地址链接，请自觉遵守约定。**
+
 ## Disclaimers 免责声明
 
 This is not an official OpenAI product. This is a personal project and is not affiliated with OpenAI in any way. Don't sue me.

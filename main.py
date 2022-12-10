@@ -4,7 +4,6 @@ import uuid
 from threading import Timer
 from urllib import parse
 
-import aiohttp_cors
 import socketio
 from aiohttp import web
 from dotenv import load_dotenv
@@ -58,6 +57,23 @@ async def rushHandler(sid):
         await sio.emit('restricted', room=sid)
 
 
+def getAnswer(sid, text):
+    try:
+        print("You: " + text)
+        answer = chat.ask(text)
+        print("AI: " + answer)
+        asyncio.run(sio.emit('answer', {
+            'code': 1,
+            'result': answer
+        }, room=sid))
+    except Exception as err:
+        print(err)
+        asyncio.run(sio.emit('answer', {
+            'code': -1,
+            'msg': str(err)
+        }, room=sid))
+
+
 @sio.event
 async def connect(sid, environ):
     queryDict = parse.parse_qs(environ['QUERY_STRING'])
@@ -97,38 +113,26 @@ def disconnect(sid):
     print('disconnect uuid:', userUUID)
 
 
+@sio.event
+async def chatgpt(sid, data):
+    text = data.text
+    token = data.token
+    # userUUID = sidUUIDMap[sid]
+    if token == '' or token not in tokenSet:
+        await sio.emit('restricted', room=sid)
+    task = Timer(3, getAnswer, (
+        sid,
+        text,
+    ))
+
+    task.start()
+
+
 async def index(request):
     return web.json_response({'error': -1})
 
 
-async def chatgpt_get(request):
-    text = parse.unquote(request.rel_url.query.get('text', ''))
-    token = parse.unquote(request.rel_url.query.get('token', ''))
-    userUUID = parse.unquote(request.rel_url.query.get('userUUID', ''))
-    if token == '' or token not in tokenSet:
-        uuidSidMap = {v: k for k, v in sidUUIDMap.items()}
-        sid = uuidSidMap.get(userUUID)
-        if sid is not None: await sio.emit('restricted', room=sid)
-        return web.json_response({'code': -2})
-    try:
-        print("You: " + text)
-        answer = chat.ask(text)
-        print("AI: " + answer)
-        return web.json_response({'code': 1, 'result': answer})
-    except:
-        return web.json_response({'code': -1})
-
-
-# Configure default CORS settings.
-cors = aiohttp_cors.setup(app,
-                          defaults={
-                              "*":
-                              aiohttp_cors.ResourceOptions(expose_headers="*",
-                                                           allow_headers="*")
-                          })
-
 app.router.add_get('/', index)
-cors.add(app.router.add_get('/chatgpt', chatgpt_get))
 
 if __name__ == '__main__':
     web.run_app(app, host="0.0.0.0", port=50000)

@@ -1,0 +1,3 @@
+[submodule "PyChatGPT"]
+	path = PyChatGPT
+	url = git@github.com:yi-ge/PyChatGPT.git

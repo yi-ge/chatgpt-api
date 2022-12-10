@@ -8,7 +8,7 @@ API代码正在完善。
 
 ## Disclaimers 免责声明
 
-This is not an official OpenAI product. This is a personal project and is not affiliated with OpenAI in any way. Don't sue me
+This is not an official OpenAI product. This is a personal project and is not affiliated with OpenAI in any way. Don't sue me.
 这不是官方的 OpenAI 产品。这是一个个人项目，与 OpenAI 没有任何关系。别告我。
 
 The code is for demo and testing only.

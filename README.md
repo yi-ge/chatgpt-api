@@ -6,6 +6,8 @@
 
 API代码正在完善。
 
+注意：**⚠⚠⚠现阶段仍有大BUG！！！**
+
 ## 依赖
 
 基于 <https://github.com/rawandahmad698/PyChatGPT> 二次开发，Fork to: <https://github.com/yi-ge/PyChatGPT>

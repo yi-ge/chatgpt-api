@@ -19,7 +19,7 @@ account_file_path = env_dist.get('ACCOUNT_FILE_PATH', '')
 if adapter == 'local':
     user_uuid_set, using_uuid_set, logout_uuid_set, token_set, using_email_set = set(
     ), set(), set(), set(), set()
-    timer_map, sid_uuid_map, token_email_map, email_chat_map = {}, {}, {}, {}
+    timer_map, sid_uuid_map, token_email_map, email_chat_map, user_token_map = {}, {}, {}, {}, {}
 
     options = Options()
 
@@ -56,8 +56,16 @@ def logout(userUUID):
         if userUUID in user_uuid_set: user_uuid_set.remove(userUUID)
         if userUUID in using_uuid_set: using_uuid_set.remove(userUUID)
         logout_uuid_set.remove(userUUID)
-        del timer_map[userUUID]
-        asyncio.run(broadcastSystemInfo())
+        try:
+          token = user_token_map[userUUID]
+          email = token_email_map[token]
+          token_set.remove(token)
+          using_email_set.remove(email)
+          del user_token_map[userUUID]
+          del timer_map[userUUID]
+          asyncio.run(broadcastSystemInfo())
+        except Exception as e:
+          print(e)
 
 
 async def broadcastSystemInfo():
@@ -71,7 +79,7 @@ async def broadcastSystemInfo():
         })
 
 
-async def rushHandler(sid):
+async def rushHandler(sid, userUUID):
     if len(using_uuid_set) < account_list_len:  # System simultaneous load number
         token = str(uuid.uuid4())
         for i in email_chat_map.keys():
@@ -79,6 +87,7 @@ async def rushHandler(sid):
                 using_email_set.add(i)
                 token_email_map[token] = i
                 token_set.add(token)
+                user_token_map[userUUID] = token
                 userUUID = sid_uuid_map.get(sid)
                 using_uuid_set.add(userUUID)
                 await sio.emit('token', token, room=sid)
@@ -139,13 +148,14 @@ async def connect(sid, environ):
 
 @sio.event
 async def rush(sid, data):
-    await rushHandler(sid)
+    userUUID = sid_uuid_map.get(sid)
+    await rushHandler(sid, userUUID)
 
 
 @sio.event
 async def ready(sid, data):
     userUUID = sid_uuid_map.get(sid)
-    if userUUID not in using_uuid_set: await rushHandler(sid)
+    if userUUID not in using_uuid_set: await rushHandler(sid, userUUID)
     await broadcastSystemInfo()
 
 
@@ -163,8 +173,8 @@ def disconnect(sid):
 async def chatgpt(sid, data):
     text = data.get('text')
     token = data.get('token')
-    # userUUID = sid_uuid_map[sid]
-    if token is None or token not in token_set:
+    userUUID = sid_uuid_map[sid]
+    if token is None or token not in token_set or user_token_map[userUUID] != token:
         await sio.emit('restricted', room=sid)
     task = Timer(3, getAnswer, (
         sid,

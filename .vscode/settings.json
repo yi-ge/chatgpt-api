@@ -1,5 +1,6 @@
 {
   "cSpell.words": ["aiohttp", "chatgpt", "dotenv", "pychatgpt"],
   "python.formatting.provider": "yapf",
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "editor.formatOnSave": false
 }

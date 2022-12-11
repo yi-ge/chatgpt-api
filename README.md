@@ -1,4 +1,4 @@
-# chatgpt-api
+# ChatGPT API
 
 <https://github.com/yi-ge/chatgpt-web> 的后端程序。
 
@@ -13,6 +13,9 @@ API代码正在完善。
 基于 <https://github.com/rawandahmad698/PyChatGPT> 二次开发，Fork to: <https://github.com/yi-ge/PyChatGPT>
 
 ## 运行
+
+参照`.env.example`，新建`.env`文件，配置好环境变量。
+参照`account.example.json`，新建`account.json`文件，配置好默认账户。
 
 ```bash
 python3 main.py

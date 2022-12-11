@@ -4,10 +4,6 @@
 
 借助OpenAPI官方Web的API实现，旨在降低中国大陆用户体验ChatGPT的成本。
 
-API代码正在完善。
-
-注意：**⚠⚠⚠现阶段仍有大BUG！！！**
-
 ## 依赖
 
 基于 <https://github.com/rawandahmad698/PyChatGPT> 二次开发，Fork to: <https://github.com/yi-ge/PyChatGPT>
@@ -21,7 +17,11 @@ API代码正在完善。
 python3 main.py
 ```
 
-**请勿用于商业用途，请保留开源仓库地址链接，请自觉遵守约定。**
+## 部署
+
+**⚠⚠⚠请勿用于商业用途，请保留开源仓库地址链接，请自觉遵守约定。**
+
+**⚠⚠⚠现阶段仍有较大BUG，请以Release发布的版本为准！**
 
 ## Disclaimers 免责声明
 

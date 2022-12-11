@@ -40,7 +40,7 @@ if adapter == 'local':
             email_chat_map[email] = Chat(email=email,
                                          password=password,
                                          options=options)
-            break
+        account_list_len = len(account_list)
 else:
     raise Exception('See the env.example file')
     # TODO: Redis operations
@@ -66,12 +66,13 @@ async def broadcastSystemInfo():
     await sio.emit(
         'systemInfo', {
             'onlineUserNum': onlineUserNum if onlineUserNum > 1 else 1,
-            'waitingUserNum': waitingUserNum if waitingUserNum > 0 else 0
+            'waitingUserNum': waitingUserNum if waitingUserNum > 0 else 0,
+            'accountCount': account_list_len
         })
 
 
 async def rushHandler(sid):
-    if len(using_uuid_set) < 1:  # System simultaneous load number
+    if len(using_uuid_set) < account_list_len:  # System simultaneous load number
         token = str(uuid.uuid4())
         for i in email_chat_map.keys():
             if i not in using_email_set:
